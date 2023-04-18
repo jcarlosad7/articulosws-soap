@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+targetNamespace="http://utp.edu.pe/articulosws2" 
+xmlns:tns="http://utp.edu.pe/articulosws2" 
+elementFormDefault="qualified">
+	<!-- Listar -->
+	<xs:element name="GetAllArticulosRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="texto" type="xs:string" />
+				<xs:element name="offset" type="xs:int" />
+				<xs:element name="limit" type="xs:int" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="GetAllArticulosResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ArticuloDetalle" type="tns:ArticuloDetalle" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Obtener -->
+	<xs:element name="GetArticuloRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="id" type="xs:int" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="GetArticuloResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ArticuloDetalle" type="tns:ArticuloDetalle"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Agregar -->
+	<xs:element name="AddArticuloRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="nombre" type="xs:string" />
+				<xs:element name="precio" type="xs:double" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="AddArticuloResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ServiceStatus" type="tns:ServiceStatus"/>
+				<xs:element name="ArticuloDetalle" type="tns:ArticuloDetalle"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Actualizar -->
+	<xs:element name="UpdateArticuloRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="id" type="xs:int" />
+				<xs:element name="nombre" type="xs:string" />
+				<xs:element name="precio" type="xs:double" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="UpdateArticuloResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ServiceStatus" type="tns:ServiceStatus"/>
+				<xs:element name="ArticuloDetalle" type="tns:ArticuloDetalle"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Eliminar -->
+	<xs:element name="DeleteArticuloRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="id" type="xs:int" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="DeleteArticuloResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ServiceStatus" type="tns:ServiceStatus"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Otros -->
+	<xs:complexType name="ArticuloDetalle">
+		<xs:sequence>
+			<xs:element name="id" type="xs:int" />
+			<xs:element name="nombre" type="xs:string" />
+			<xs:element name="precio" type="xs:double" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ServiceStatus">
+        <xs:sequence>
+            <xs:element name="statusCode" type="xs:string"/>
+            <xs:element name="message" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
