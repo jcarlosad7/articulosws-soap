@@ -61,5 +61,37 @@ public class ArticuloService {
 			return null;
 		}
 	}
+	@Transactional
+	public Articulo update(Articulo articulo) {
+		try {
+			Articulo registro = repository.findById(articulo.getId()).
+					orElseThrow();
+			Articulo registroD= repository.findByNombre(articulo.getNombre());
+			
+			if(registroD!=null && articulo.getId()!=registroD.getId()) {
+				return null;
+			}
+			
+			registro.setNombre(articulo.getNombre());
+			registro.setPrecio(articulo.getPrecio());
+			repository.save(registro);
+			return registro;
+		}catch(Exception e) {
+			log.error(e.getMessage());
+			return null;
+		}
+	}
+	
+	@Transactional
+	public boolean delete(int id) {
+		try {
+			Articulo articulo=repository.findById(id).orElseThrow();
+			repository.delete(articulo);
+			return true;
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return false;
+		}
+	}
 	
 }

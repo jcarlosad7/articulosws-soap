@@ -16,11 +16,15 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import pe.edu.utp.articulosws2.AddArticuloRequest;
 import pe.edu.utp.articulosws2.AddArticuloResponse;
 import pe.edu.utp.articulosws2.ArticuloDetalle;
+import pe.edu.utp.articulosws2.DeleteArticuloRequest;
+import pe.edu.utp.articulosws2.DeleteArticuloResponse;
 import pe.edu.utp.articulosws2.GetAllArticulosRequest;
 import pe.edu.utp.articulosws2.GetAllArticulosResponse;
 import pe.edu.utp.articulosws2.GetArticuloRequest;
 import pe.edu.utp.articulosws2.GetArticuloResponse;
 import pe.edu.utp.articulosws2.ServiceStatus;
+import pe.edu.utp.articulosws2.UpdateArticuloRequest;
+import pe.edu.utp.articulosws2.UpdateArticuloResponse;
 import pe.edu.utp.articulosws2.entity.Articulo;
 import pe.edu.utp.articulosws2.service.ArticuloService;
 
@@ -88,4 +92,46 @@ public class ArticuloEndpoint {
 		}
 		return response;
 	}
+	@PayloadRoot(namespace = "http://utp.edu.pe/articulosws2", localPart = "UpdateArticuloRequest")
+	@ResponsePayload
+	public UpdateArticuloResponse update (@RequestPayload UpdateArticuloRequest request) {
+		ServiceStatus serviceStatus = new ServiceStatus();
+		UpdateArticuloResponse response= new UpdateArticuloResponse();
+		Articulo entity = service.findById(request.getId());
+		entity.setNombre(request.getNombre());
+		entity.setPrecio(request.getPrecio());
+		entity=service.update(entity);		
+		if (entity!=null) {
+			ArticuloDetalle articulo= new ArticuloDetalle();
+			BeanUtils.copyProperties(entity, articulo);
+			response.setArticuloDetalle(articulo);
+			serviceStatus.setStatusCode("SUCCESS");
+     	    serviceStatus.setMessage("Content Updated Successfully");
+     	    response.setServiceStatus(serviceStatus);			
+		}else {
+			serviceStatus.setStatusCode("CONFLICT");
+	     	serviceStatus.setMessage("Content Not Updated");
+	     	response.setServiceStatus(serviceStatus);
+		}
+		return response;
+	}
+	
+	@PayloadRoot(namespace = "http://utp.edu.pe/articulosws2", localPart = "DeleteArticuloRequest")
+	@ResponsePayload
+	public DeleteArticuloResponse create (@RequestPayload DeleteArticuloRequest request) {
+		ServiceStatus serviceStatus=new ServiceStatus();
+		DeleteArticuloResponse response = new DeleteArticuloResponse();
+		boolean resp=service.delete(request.getId());
+		if(resp) {
+			serviceStatus.setStatusCode("SUCCESS");
+			serviceStatus.setMessage("Content Deleted Successfully");
+			response.setServiceStatus(serviceStatus);
+		}else {
+			serviceStatus.setStatusCode("CONFLICT");
+			serviceStatus.setMessage("Content Not Deleted");
+			response.setServiceStatus(serviceStatus);
+		}
+		return response;
+	}
+	
 }
